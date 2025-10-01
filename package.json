@@ -1,0 +1,67 @@
+{
+  "name": "@yellowcable/starling",
+  "description": "Starling: a Nuxt helper layer",
+  "author": "Rick Pennings <info@yellowcable.nl>",
+  "type": "module",
+  "main": "dist/module.js",
+  "types": "types/module.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types/nuxt.config.d.ts",
+      "default": "./dist/nuxt.config.js"
+    },
+    "./package.json": "./package.json",
+    "./modules/*": {
+      "types": "./types/modules/*.d.ts",
+      "default": "./dist/modules/*.js"
+    },
+    "./module": {
+      "types": "./types/module.d.ts",
+      "default": "./dist/module.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsc --watch",
+    "lint": "eslint . --ext .ts,.js,.vue",
+    "lint-fix": "eslint . --ext .ts,.js,.vue --fix",
+    "lint:json": "eslint . --ext .json --plugin jsonc",
+    "lint:css": "stylelint '**/*.{css,scss,sass}'",
+    "lint:css-fix": "stylelint '**/*.{css,scss,sass}' --fix",
+    "lint:all": "eslint . --ext .ts,.js,.vue && eslint . --ext .json --plugin jsonc && stylelint '**/*.{css,scss,sass}'",
+    "prepare": "npm run build"
+  },
+  "files": [
+    "dist",
+    "types"
+  ],
+  "keywords": [
+    "nuxt",
+    "composable",
+    "module",
+    "layer",
+    "frontend",
+    "helper"
+  ],
+  "peerDependencies": {
+    "nuxt": ">=4.1.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2",
+    "@nuxt/kit": "^4.1.2",
+    "@types/node": "^24.5.2",
+
+    "globals": "^16.4.0",
+    "eslint": "^9.36.0",
+    "@eslint/js": "^9.36.0",
+    "@typescript-eslint/parser": "^8.45.0",
+    "typescript-eslint": "^8.14.0",
+    "typescript-parser": "^2.6.1",
+    "eslint-plugin-vue": "^9.29.0",
+    "eslint-plugin-jsonc": "^2.20.1",
+    "jsonc-eslint-parser": "^2.4.1",
+    "stylelint": "^16.24.0",
+    "stylelint-config-standard": "^39.0.0",
+    "stylelint-scss": "^6.12.1"
+  }
+}
