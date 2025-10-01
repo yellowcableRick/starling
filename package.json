@@ -29,6 +29,7 @@
     "lint:css": "stylelint '**/*.{css,scss,sass}'",
     "lint:css-fix": "stylelint '**/*.{css,scss,sass}' --fix",
     "lint:all": "eslint . --ext .ts,.js,.vue && eslint . --ext .json --plugin jsonc && stylelint '**/*.{css,scss,sass}'",
+    "test": "vitest run",
     "prepare": "npm run build"
   },
   "files": [
@@ -50,6 +51,7 @@
     "typescript": "^5.9.2",
     "@nuxt/kit": "^4.1.2",
     "@types/node": "^24.5.2",
+    "vitest": "^3.2.4",
 
     "globals": "^16.4.0",
     "eslint": "^9.36.0",

@@ -42,13 +42,10 @@ export const useStringSimilarity = (): StringSimilarity => {
     };
 
     const normalizeArticles = (str: string) => {
-        const articles: string[] = ["the", "a", "an"];
-        const words: string[] = normalize(str).split(/\s+/);
-        if (words.length !== 0 && words[0]) {
-            if (articles.includes(words[0])) {
-                words.push(words.shift()!);
-            }
-        }
+        const articles: Set<string> = new Set(["the", "a", "an"]);
+        const words: string[] = normalize(str)
+            .split(/\s+/)
+            .filter((w: string) => w.length > 0 && !articles.has(w));
         return words.join(" ");
     };
 
@@ -73,7 +70,7 @@ export const useStringSimilarity = (): StringSimilarity => {
         return Math.round(((result / division) + Number.EPSILON) * 100) / 100;
     };
 
-    const isSimilar = (a: string, b: string, threshold: number = 0.8): boolean => {
+    const isSimilar = (a: string, b: string, threshold: number = 0.75): boolean => {
         return similarity(a, b) >= threshold;
     };
 
