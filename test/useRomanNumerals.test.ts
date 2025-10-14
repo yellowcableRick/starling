@@ -2,26 +2,26 @@ import { describe, it, expect } from "vitest";
 import { useRomanNumerals } from "../modules/converters/composables/useRomanNumerals";
 
 describe("useRomanNumerals", () => {
-  const { romanToNumber } = useRomanNumerals();
+    const { toNumber } = useRomanNumerals();
 
-  it("converts simple numerals", () => {
-    expect(romanToNumber("I")).toBe(1);
-    expect(romanToNumber("II")).toBe(2);
-    expect(romanToNumber("IV")).toBe(4);
-    expect(romanToNumber("V")).toBe(5);
-    expect(romanToNumber("IX")).toBe(9);
-    expect(romanToNumber("X")).toBe(10);
-  });
+    it("converts simple numerals", () => {
+        expect(toNumber("I")).toBe(1);
+        expect(toNumber("II")).toBe(2);
+        expect(toNumber("IV")).toBe(4);
+        expect(toNumber("V")).toBe(5);
+        expect(toNumber("IX")).toBe(9);
+        expect(toNumber("X")).toBe(10);
+    });
 
-  it("handles lowercase and complex numerals", () => {
-    expect(romanToNumber("ix")).toBe(9);
-    expect(romanToNumber("MCMXC")).toBe(1990); // 1990
-    expect(romanToNumber("MMXXV")).toBe(2025); // 2025
-  });
+    it("handles lowercase and complex numerals", () => {
+        expect(toNumber("ix")).toBe(9);
+        expect(toNumber("MCMXC")).toBe(1990); // 1990
+        expect(toNumber("MMXXV")).toBe(2025); // 2025
+    });
 
-  it("returns undefined for invalid strings", () => {
-    expect(romanToNumber("ABC")).toBeUndefined();
-    expect(romanToNumber("IIV")).toBe(romanToNumber("I")! + romanToNumber("IV")!); // permissive parsing
-    expect(romanToNumber("")).toBe(0);
-  });
+    it("returns undefined for invalid strings", () => {
+        expect(toNumber("ABC")).toBeUndefined();
+        expect(toNumber("IIV")).toBe(toNumber("I")! + toNumber("IV")!); // permissive parsing
+        expect(toNumber("")).toBe(0);
+    });
 });

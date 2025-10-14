@@ -1,4 +1,5 @@
 export type UseRomanNumerals = {
-    romanToNumber: (str: string) => number | undefined;
+    toNumber: (str: string) => number | undefined;
+    toRoman: (num: number) => string;
 };
 export declare const useRomanNumerals: () => UseRomanNumerals;

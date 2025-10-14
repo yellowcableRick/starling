@@ -1,23 +1,15 @@
 {
   "name": "@yellowcable/starling",
-  "description": "Starling: a Nuxt helper layer",
+  "description": "Starling: framework-agnostic TypeScript utilities and composables",
   "author": "Rick Pennings <info@yellowcable.nl>",
   "type": "module",
-  "main": "dist/module.js",
-  "types": "types/module.d.ts",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./types/nuxt.config.d.ts",
-      "default": "./dist/nuxt.config.js"
-    },
     "./package.json": "./package.json",
     "./modules/*": {
       "types": "./types/modules/*.d.ts",
       "default": "./dist/modules/*.js"
-    },
-    "./module": {
-      "types": "./types/module.d.ts",
-      "default": "./dist/module.js"
     }
   },
   "scripts": {
@@ -37,19 +29,15 @@
     "types"
   ],
   "keywords": [
-    "nuxt",
+    "typescript",
+    "utilities",
     "composable",
     "module",
-    "layer",
     "frontend",
     "helper"
   ],
-  "peerDependencies": {
-    "nuxt": ">=4.1.2"
-  },
   "devDependencies": {
     "typescript": "^5.9.2",
-    "@nuxt/kit": "^4.1.2",
     "@types/node": "^24.5.2",
     "vitest": "^3.2.4",
 

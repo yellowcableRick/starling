@@ -5,4 +5,4 @@ export default {
     rules: {
         "property-no-vendor-prefix": null,
     }
-}
+};

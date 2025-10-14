@@ -1,5 +1,5 @@
 import { useRomanNumerals } from "../../converters/composables/useRomanNumerals";
-const { romanToNumber } = useRomanNumerals();
+const { toNumber } = useRomanNumerals();
 
 export type StringSimilarity = {
     similarity: (a: string, b: string) => number;
@@ -178,7 +178,7 @@ const comparisons: Comparison[] = [
                 return n;
             }
 
-            const r: number | undefined = romanToNumber(x);
+            const r: number | undefined = toNumber(x);
             if (r !== undefined) {
                 return r;
             }
