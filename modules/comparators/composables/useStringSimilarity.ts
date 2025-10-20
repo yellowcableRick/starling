@@ -1,4 +1,4 @@
-import { useRomanNumerals } from "../../converters/composables/useRomanNumerals";
+import { useRomanNumerals } from "../../converters/composables/useRomanNumerals.js";
 
 export type StringSimilarity = {
     similarity: (a: string, b: string) => number;
