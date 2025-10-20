@@ -1,5 +1,4 @@
 import { useRomanNumerals } from "../../converters/composables/useRomanNumerals";
-const { toNumber } = useRomanNumerals();
 
 export type StringSimilarity = {
     similarity: (a: string, b: string) => number;
@@ -49,6 +48,63 @@ export const useStringSimilarity = (): StringSimilarity => {
         return words.join(" ");
     };
 
+    // IMPORTANT: get Roman numeral helpers inside the composable, not at module scope
+    const { toNumber } = useRomanNumerals();
+
+    const comparisons: Comparison[] = [
+        function intersection(aWords: Set<string>, bWords: Set<string>): number {
+            // Default penalty factor; this overlaps both dice and strict.
+            const penalty: number = 0.5;
+
+            // If no overlap at all → mark as invalid
+            if (![...aWords].some((w: string) => bWords.has(w))) {
+                return -1;
+            }
+
+            const interSize: number = [...aWords].filter((x: string) => bWords.has(x)).length;
+
+            // Original formula (Dice coefficient, more forgiving)
+            const dice: number = (2 * interSize) / (aWords.size + bWords.size);
+
+            // Stricter formula (intersection over max size, harsher on extra words)
+            const strict: number = interSize / Math.max(aWords.size, bWords.size);
+
+            // Blend them based on a penalty factor
+            return (dice * (1 - penalty)) + (strict * penalty);
+        },
+        function numeric(aWords: Set<string>, bWords: Set<string>): number {
+            const convert = (x: string): number | null => {
+                const n: number = Number(x);
+                if (!isNaN(n)) {
+                    return n;
+                }
+
+                const r: number | undefined = toNumber(x);
+                if (r !== undefined) {
+                    return r;
+                }
+
+                return null; // ignore non-numeric words
+            };
+
+            const aNumbers: number[] = [...aWords].map(convert).filter((x: number | null): x is number => x !== null);
+            const bNumbers: number[] = [...bWords].map(convert).filter((x: number | null): x is number => x !== null);
+
+            // If either has numbers, compare strictly
+            if (aNumbers.length > 0 || bNumbers.length > 0) {
+                const intersection: number[] = aNumbers.filter((x: number) => bNumbers.includes(x));
+                if (intersection.length === 0) {
+                    return 0; // penalize different sequels
+                }
+
+                return intersection.length / Math.max(aNumbers.length, bNumbers.length);
+            }
+
+            // No numbers → ignore numeric contribution
+            return -1;
+        }
+    ];
+
     const similarity = (a: string, b: string): number => {
         const aWords: Set<string> = new Set(normalizeArticles(a).split(/\s+/));
         const bWords: Set<string> = new Set(normalizeArticles(b).split(/\s+/));
@@ -85,7 +141,6 @@ export const useStringSimilarity = (): StringSimilarity => {
         }: BestMatchesOptions<T, U>
     ): BestMatches<T, U> => {
         const deltas: BestMatchesEntry<T, U>[] = [];
-
 
         // Pre-normalize strings
         const normalizedTargets: string[] = targets.map((t: T) => normalizeArticles(extractTarget(t)));
@@ -149,57 +204,3 @@ export const useStringSimilarity = (): StringSimilarity => {
 
     return { similarity, isSimilar, bestMatches };
 };
-
-const comparisons: Comparison[] = [
-    function intersection(aWords: Set<string>, bWords: Set<string>): number {
-        // Default penalty factor; this overlaps both dice and strict.
-        const penalty: number = 0.5;
-
-        // If no overlap at all → mark as invalid
-        if (![...aWords].some((w: string) => bWords.has(w))) {
-            return -1;
-        }
-
-        const interSize: number = [...aWords].filter((x: string) => bWords.has(x)).length;
-
-        // Original formula (Dice coefficient, more forgiving)
-        const dice: number = (2 * interSize) / (aWords.size + bWords.size);
-
-        // Stricter formula (intersection over max size, harsher on extra words)
-        const strict: number = interSize / Math.max(aWords.size, bWords.size);
-
-        // Blend them based on a penalty factor
-        return (dice * (1 - penalty)) + (strict * penalty);
-    },
-    function numeric(aWords: Set<string>, bWords: Set<string>): number {
-        const convert = (x: string): number | null => {
-            const n: number = Number(x);
-            if (!isNaN(n)) {
-                return n;
-            }
-
-            const r: number | undefined = toNumber(x);
-            if (r !== undefined) {
-                return r;
-            }
-
-            return null; // ignore non-numeric words
-        };
-
-        const aNumbers: number[] = [...aWords].map(convert).filter((x: number | null): x is number => x !== null);
-        const bNumbers: number[] = [...bWords].map(convert).filter((x: number | null): x is number => x !== null);
-
-        // If either has numbers, compare strictly
-        if (aNumbers.length > 0 || bNumbers.length > 0) {
-            const intersection: number[] = aNumbers.filter((x: number) => bNumbers.includes(x));
-            if (intersection.length === 0) {
-                return 0; // penalize different sequels
-            }
-
-            return intersection.length / Math.max(aNumbers.length, bNumbers.length);
-        }
-
-        // No numbers → ignore numeric contribution
-        return -1;
-    }
-];
